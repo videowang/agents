@@ -47,7 +47,7 @@ async def entrypoint(ctx: JobContext):
     agent = VoicePipelineAgent(
         vad=ctx.proc.userdata["vad"],
         stt=deepgram.STT(model=dg_model),
-        llm=openai.LLM(model="gpt-4o-mini"),
+        llm=openai.LLM(),
         tts=openai.TTS(),
         chat_ctx=initial_ctx,
     )
