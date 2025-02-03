@@ -17,6 +17,7 @@ from livekit.plugins import deepgram, openai, silero
 
 load_dotenv()
 logger = logging.getLogger("voice-assistant")
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 
 def prewarm(proc: JobProcess):
@@ -44,13 +45,15 @@ async def entrypoint(ctx: JobContext):
         # use a model optimized for telephony
         dg_model = "nova-2-phonecall"
 
+    logger.info("Initializing voice pipeline agent...")
     agent = VoicePipelineAgent(
         vad=ctx.proc.userdata["vad"],
         stt=deepgram.STT(model=dg_model),
-        llm=openai.LLM(),
+        llm=openai.LLM(model="gpt-3.5-turbo"),
         tts=openai.TTS(),
         chat_ctx=initial_ctx,
     )
+    logger.info("Voice pipeline agent initialized successfully")
 
     agent.start(ctx.room, participant)
 
