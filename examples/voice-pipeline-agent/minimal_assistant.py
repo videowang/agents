@@ -49,7 +49,10 @@ async def entrypoint(ctx: JobContext):
     agent = VoicePipelineAgent(
         vad=ctx.proc.userdata["vad"],
         stt=deepgram.STT(model=dg_model),
-        llm=openai.LLM(model="gpt-3.5-turbo"),
+        llm=openai.LLM.with_deepseek(
+            model="deepseek-chat",
+            base_url="https://api.deepseek.com/v1"
+        ),
         tts=openai.TTS(),
         chat_ctx=initial_ctx,
     )
